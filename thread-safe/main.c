@@ -65,6 +65,7 @@ int example_function() {
 	}
 
 	free(ll);
+	printf("list: %d %d %d \n",ll->head->val,ll->head->next->val,ll->head->next->next->val);
 
 	return 0;
 }
@@ -72,6 +73,8 @@ int example_function() {
 int
 main(void)
 {
+	example_function();
+	return 0;
 	struct linked_list *ll;
 
 	// ll_create
