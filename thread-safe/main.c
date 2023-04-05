@@ -1,28 +1,38 @@
-#include <list.h>
+#include "list.h"
 
 void *add_thread(void *argp) {
 	struct args *add_args = (struct args*)argp;
 	ll_add(add_args->ll, add_args->value);
+
+	pthread_exit(NULL);
 }
 
-int *length_thread(void *argp) {
+void *length_thread(void *argp) {
 	struct args *length_args = (struct args*)argp;
-	return ll_length(length_args->ll);
+	length_args->result = ll_length(length_args->ll);
+
+	pthread_exit(NULL);
 }
 
-bool *remove_thread(void *argp) {
+void *remove_thread(void *argp) {
 	struct args *remove_args = (struct args*)argp;
-	return ll_remove_first(length_args->ll);
+	remove_args->result = ll_remove(remove_args->ll, remove_args->value);
+
+	pthread_exit(NULL);
 }
 
-int *contains_thread(void *argp) {
+void *contains_thread(void *argp) {
 	struct args *contains_args = (struct args*)argp;
-	return ll_contains(contains_args->ll, contains_args->value);
+	contains_args->result = ll_contains(contains_args->ll, contains_args->value);
+
+	pthread_exit(NULL);
 }
 
 void *print_thread(void *argp) {
 	struct args *print_args = (struct args*)argp;
 	ll_print(print_args->ll);
+
+	pthread_exit(NULL);
 }
 
 int example_function() {
@@ -87,7 +97,7 @@ main(void)
 	// ll_destroy emptied
 	ll = ll_create();
 	ll_add(ll, 3);
-	ll_remove_first(ll);
+	ll_remove(ll,0);
 	temp = ll_destroy(ll);
 	if (temp == 0) {
 		printf("fail 3\n");
@@ -96,7 +106,7 @@ main(void)
 	// ll_destroy emptied and then added again
 	ll = ll_create();
 	ll_add(ll, 3);
-	ll_remove_first(ll);
+	ll_remove(ll,0);
 	ll_add(ll, 1);
 	temp = ll_destroy(ll);
 	if (temp == 1) {
@@ -125,7 +135,7 @@ main(void)
 	// ll_add add, remove, add
 	ll = ll_create();
 	ll_add(ll, 3);
-	ll_remove_first(ll);
+	ll_remove(ll,0);
 	ll_add(ll, 3);
 	free(ll);
 
@@ -161,7 +171,7 @@ main(void)
 	// ll_length add, remove
 	ll = ll_create();
 	ll_add(ll,7);
-	ll_remove_first(ll);
+	ll_remove(ll,0);
 	temp = ll_length(ll);
 	if (temp != 0) {
 		printf("fail 8\n");
@@ -171,7 +181,7 @@ main(void)
 	// ll_length add, remove, add
 	ll = ll_create();
 	ll_add(ll,7);
-	ll_remove_first(ll);
+	ll_remove(ll,0);
 	ll_add(ll,7);
 	temp = ll_length(ll);
 	if (temp != 1) {
@@ -184,7 +194,7 @@ main(void)
 	ll = ll_create();
 	ll_add(ll,7);
 	ll_add(ll,6);
-	ll_remove_first(ll);
+	ll_remove(ll,0);
 	temp = ll_length(ll);
 	if (temp != 1) {
 		printf("%d ", temp);
@@ -194,7 +204,7 @@ main(void)
 
 	// remove empty
 	ll = ll_create();
-	bool tb = ll_remove_first(ll);
+	bool tb = ll_remove(ll,0);
 	if (tb != false) {
 		printf("fail 11\n");
 	}
@@ -203,7 +213,7 @@ main(void)
 	// remove one
 	ll = ll_create();
 	ll_add(ll,5);
-	tb = ll_remove_first(ll);
+	tb = ll_remove(ll,0);
 	if (tb != true) {
 		printf("fail 12\n");
 	}
@@ -214,11 +224,11 @@ main(void)
 	ll_add(ll,5);
 	ll_add(ll,-1);
 	ll_add(ll,8);
-	tb = ll_remove_first(ll);
+	tb = ll_remove(ll,0);
 	if (tb != true) {
 		printf("fail 13\n");
 	}
-	tb = ll_remove_first(ll);
+	tb = ll_remove(ll,0);
 	if (tb != true) {
 		printf("fail 14\n");
 	}
@@ -228,11 +238,11 @@ main(void)
 	ll = ll_create();
 	ll_add(ll,9);
 	ll_add(ll,-3);
-	tb = ll_remove_first(ll);
+	tb = ll_remove(ll,0);
 	if (tb != true) {
 		printf("fail 15\n");
 	}
-	tb = ll_remove_first(ll);
+	tb = ll_remove(ll,0);
 	if (tb != true) {
 		printf("fail 16\n");
 	}
@@ -240,12 +250,12 @@ main(void)
 
 	// remove remove, add, remove
 	ll = ll_create();
-	tb = ll_remove_first(ll);
+	tb = ll_remove(ll,0);
 	if (tb != false) {
 		printf("fail 17\n");
 	}
 	ll_add(ll,15);
-	tb = ll_remove_first(ll);
+	tb = ll_remove(ll,0);
 	if (tb != true) {
 		printf("fail 18\n");
 	}
@@ -254,11 +264,11 @@ main(void)
 	// remove twice with only one
 	ll = ll_create();
 	ll_add(ll,-7);
-	tb = ll_remove_first(ll);
+	tb = ll_remove(ll,0);
 	if (tb != true) {
 		printf("fail 19\n");
 	}
-	tb = ll_remove_first(ll);
+	tb = ll_remove(ll,0);
 	if (tb != false) {
 		printf("fail 20\n");
 	}
@@ -335,7 +345,7 @@ main(void)
 	// contains add, remove
 	ll = ll_create();
 	ll_add(ll,4);
-	ll_remove_first(ll);
+	ll_remove(ll,0);
 	temp = ll_contains(ll,4);
 	if (temp != 0) {
 		printf("fail 28\n");
@@ -346,7 +356,7 @@ main(void)
 	ll = ll_create();
 	ll_add(ll,4);
 	ll_add(ll,4);
-	ll_remove_first(ll);
+	ll_remove(ll,0);
 	temp = ll_contains(ll,4);
 	if (temp != 1) {
 		printf("%d ", temp);
@@ -358,7 +368,7 @@ main(void)
 	ll = ll_create();
 	ll_add(ll,4);
 	ll_add(ll,7);
-	ll_remove_first(ll);
+	ll_remove(ll,0);
 	temp = ll_contains(ll,4);
 	if (temp != 1) {
 		printf("%d ", temp);
@@ -370,7 +380,7 @@ main(void)
 	ll = ll_create();
 	ll_add(ll,4);
 	ll_add(ll,7);
-	ll_remove_first(ll);
+	ll_remove(ll,0);
 	temp = ll_contains(ll,7);
 	if (temp != 0) {
 		printf("fail 31\n");
@@ -381,15 +391,15 @@ main(void)
 	ll_add(ll,3);
 	ll_add(ll,6);
 	ll_add(ll,5);
-	ll_remove_first(ll);
+	ll_remove(ll,0);
 	ll_add(ll,-9);
-	ll_remove_first(ll);
+	ll_remove(ll,0);
 	ll_add(ll,19);
 	ll_add(ll,8);
 	ll_add(ll,8);
 	ll_add(ll,3);
 	ll_add(ll,4);
-	ll_remove_first(ll);
+	ll_remove(ll,0);
 	ll_add(ll,1);
 	ll_print(ll);
 	
