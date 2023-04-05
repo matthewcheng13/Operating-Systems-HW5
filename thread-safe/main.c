@@ -4,7 +4,7 @@ void *add_thread(void *argp) {
 	struct args *add_args = (struct args*)argp;
 	ll_add(add_args->ll, add_args->value);
 
-	pthread_exit(NULL);
+	return NULL;
 }
 
 void *length_thread(void *argp) {
@@ -178,7 +178,7 @@ int test_add_length_add_length() {
 	}
 	printf("\n");
 
-
+	free(cur);
 	free(ll);
 
 	return 0;
@@ -230,8 +230,8 @@ int test_add_remove_add_add_remove() {
 		cur=cur->next;
 		
 	}
-	printf("\n ");
-
+	printf("\n");
+	free(cur);
 
 	free(ll);
 
@@ -277,9 +277,19 @@ int add5() {
 		pthread_join(tid[i], NULL);
 	}
 
-	free(ll);
-	printf("list: %d %d %d %d %d \n",ll->head->val,ll->head->next->val,ll->head->next->next->val,ll->head->next->next->next->val,ll->head->next->next->next->next->val);
+	
+	printf("list: ");
+	struct node *cur = ll->head;
+	while (cur!=NULL) {
+		printf(" %d",cur->val);
+		cur=cur->next;
+		
+	}
 
+	printf("\n");
+
+	free(cur);
+	free(ll);
 	return 0;
 }
 
@@ -288,8 +298,8 @@ int
 main(void)
 {
 	printf("Testing Add -> Remove\n");
-	for(int i=0;i<5;i++) {
-		test_add_remove(); // Running this 5 times will allow 2 possibilities to happen: add -> remove or remove -> add
+	for(int i=0;i<10;i++) {
+		test_add_remove(); // Running this 10 times will allow 2 possibilities to happen: add -> remove or remove -> add
 	}
 	printf("Testing Add x 5\n");
 	for(int i=0;i<5;i++) {
