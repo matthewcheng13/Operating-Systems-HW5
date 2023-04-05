@@ -82,7 +82,7 @@ ll_length(struct linked_list *ll)
 }
 
 static inline int
-ll_remove(struct linked_list *ll, int index)
+ll_remove(struct linked_list *ll, int index) // Remove the node at specified index
 {
     pthread_mutex_lock(&ll->lock);
 
