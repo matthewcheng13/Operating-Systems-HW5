@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdatomic.h>
+#include <pthread.h>
 
 struct node {
     int val;
@@ -13,6 +14,12 @@ struct node {
 
 struct linked_list {
     _Atomic(struct node *) head;
+};
+
+struct args {
+    struct linked_list *ll;
+    int value;
+    int result;
 };
 
 static inline struct linked_list *
@@ -71,7 +78,7 @@ ll_length(struct linked_list *ll)
 }
 
 static inline bool
-ll_remove_first(struct linked_list *ll, int index)
+ll_remove(struct linked_list *ll, int index)
 {
     /*if (ll->head == NULL) {
         return false;
@@ -98,7 +105,7 @@ ll_remove_first(struct linked_list *ll, int index)
             if (old_head == NULL) {
                 return false;
             }
-        } while (!atomic_compare_exchange_weak(&ll->head,&old_head,old_nead->next));
+        } while (!atomic_compare_exchange_weak(&ll->head,&old_head,old_head->next));
 
     } else {
         // removing any other node
