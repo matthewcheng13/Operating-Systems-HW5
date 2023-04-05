@@ -19,6 +19,7 @@ struct linked_list {
 struct args {
     struct linked_list *ll;
     int value;
+    int result;
 };
 
 static inline struct linked_list *
@@ -80,20 +81,20 @@ ll_length(struct linked_list *ll)
 	return len;
 }
 
-static inline bool
+static inline int
 ll_remove(struct linked_list *ll, int index)
 {
     pthread_mutex_lock(&ll->lock);
 
     if (ll->head == NULL) {
         pthread_mutex_unlock(&ll->lock);
-        return false;
+        return 0;
     }
 
     if (index == 0) {
         ll->head = ll->head->next;
         pthread_mutex_unlock(&ll->lock);
-        return true;
+        return 1;
     }
 
     struct node *prev = ll->head;
@@ -107,15 +108,15 @@ ll_remove(struct linked_list *ll, int index)
         i++;
     }
 
-    if (curr && i == next) {
+    if (curr && i == index) {
         prev->next = curr->next;
         free(curr);
         pthread_mutex_unlock(&ll->lock);
-        return true;
+        return 1;
     }    
 
     pthread_mutex_unlock(&ll->lock);
-	return false;
+	return 0;
 }
 
 static inline int
