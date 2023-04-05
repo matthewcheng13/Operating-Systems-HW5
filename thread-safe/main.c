@@ -35,9 +35,62 @@ void *print_thread(void *argp) {
 	pthread_exit(NULL);
 }
 
-int example_function() {
+int test_add_remove_add_add_remove() {
 	struct linked_list *ll;
-	pthread_t tid[3];
+	pthread_t tid[5];
+
+	// example for calling thread functions
+	ll = ll_create();
+
+	struct args *add_args1 = (struct args *)malloc(sizeof(struct args));
+	add_args1->ll = ll;
+	add_args1->value = 3; // value we are adding
+
+	struct args *remove_args2 = (struct args *)malloc(sizeof(struct args));
+	remove_args2->ll = ll;
+	remove_args2->value = 0; // value we are removing at index
+	
+	struct args *add_args3 = (struct args *)malloc(sizeof(struct args));
+	add_args3->ll = ll;
+	add_args3->value = 7; // value we are adding
+
+	struct args *add_args4 = (struct args *)malloc(sizeof(struct args));
+	add_args4->ll = ll;
+	add_args4->value = 9; // value we are adding
+
+	struct args *remove_args5 = (struct args *)malloc(sizeof(struct args));
+	remove_args5->ll = ll;
+	remove_args5->value = 1; // value we are removing at index
+
+	// we need to first create each thread
+	pthread_create(&tid[0], NULL, add_thread, (void *)add_args1);
+	pthread_create(&tid[1], NULL, remove_thread, (void *)remove_args2);
+	pthread_create(&tid[2], NULL, add_thread, (void *)add_args3);
+	pthread_create(&tid[3], NULL, add_thread, (void *)add_args4);
+	pthread_create(&tid[4], NULL, remove_thread, (void *)remove_args5);
+
+	// and then we join all of them to the main thread
+	for (int i = 0; i < 5; i++) {
+		pthread_join(tid[i], NULL);
+	}
+	struct node *cur = ll->head;
+	printf("list: ");
+	while (cur!=NULL) {
+		printf(" %d",cur->val);
+		cur=cur->next;
+		
+	}
+	printf("\n ");
+
+
+	free(ll);
+
+	return 0;
+}
+
+int add5() {
+	struct linked_list *ll;
+	pthread_t tid[5];
 
 	// example for calling thread functions
 	ll = ll_create();
@@ -54,33 +107,45 @@ int example_function() {
 	add_args3->ll = ll;
 	add_args3->value = 7; // value we are adding
 
+	struct args *add_args4 = (struct args *)malloc(sizeof(struct args));
+	add_args4->ll = ll;
+	add_args4->value = 9; // value we are adding
+
+	struct args *add_args5 = (struct args *)malloc(sizeof(struct args));
+	add_args5->ll = ll;
+	add_args5->value = 12; // value we are adding
+
 	// we need to first create each thread
 	pthread_create(&tid[0], NULL, add_thread, (void *)add_args1);
 	pthread_create(&tid[1], NULL, add_thread, (void *)add_args2);
 	pthread_create(&tid[2], NULL, add_thread, (void *)add_args3);
+	pthread_create(&tid[3], NULL, add_thread, (void *)add_args4);
+	pthread_create(&tid[4], NULL, add_thread, (void *)add_args5);
 
 	// and then we join all of them to the main thread
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 5; i++) {
 		pthread_join(tid[i], NULL);
 	}
 
 	free(ll);
-	printf("list: %d %d %d \n",ll->head->val,ll->head->next->val,ll->head->next->next->val);
+	printf("list: %d %d %d %d %d \n",ll->head->val,ll->head->next->val,ll->head->next->next->val,ll->head->next->next->next->val,ll->head->next->next->next->next->val);
 
 	return 0;
 }
 
+
 int
 main(void)
 {
-	example_function();
+	add5();
+	test_add_remove_add_add_remove();
 	return 0;
 	struct linked_list *ll;
 
 	// ll_create
 	ll = ll_create();
 	free(ll);
-
+	
 	// ll_destroy empty
 	ll = ll_create();
 	int temp = ll_destroy(ll);
