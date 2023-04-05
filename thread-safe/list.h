@@ -81,18 +81,41 @@ ll_length(struct linked_list *ll)
 }
 
 static inline bool
-ll_remove_first(struct linked_list *ll)
+ll_remove(struct linked_list *ll, int index)
 {
     pthread_mutex_lock(&ll->lock);
+
     if (ll->head == NULL) {
         pthread_mutex_unlock(&ll->lock);
         return false;
     }
-    ll->head = ll->head->next;
+
+    if (index == 0) {
+        ll->head = ll->head->next;
+        pthread_mutex_unlock(&ll->lock);
+        return true;
+    }
+
+    struct node *prev = ll->head;
+    struct node *curr = prev->next;
+
+    int i = 1;
+
+    while (curr && i < index) {
+        prev = curr;
+        curr = curr->next;
+        i++;
+    }
+
+    if (curr && i == next) {
+        prev->next = curr->next;
+        free(curr);
+        pthread_mutex_unlock(&ll->lock);
+        return true;
+    }    
 
     pthread_mutex_unlock(&ll->lock);
-
-	return true;
+	return false;
 }
 
 static inline int

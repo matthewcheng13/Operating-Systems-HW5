@@ -71,20 +71,41 @@ ll_length(struct linked_list *ll)
 }
 
 static inline bool
-ll_remove_first(struct linked_list *ll)
+ll_remove_first(struct linked_list *ll, int index)
 {
     /*if (ll->head == NULL) {
         return false;
     }*/
-    struct node *old_head;
-    do {
-        old_head = atomic_load(&ll->head);
-        if (old_head == NULL) {
-            return false;
-        }
-    } while (!atomic_compare_exchange_weak(&ll->head,old_head,old_nead->next));
+    struct node *prev = NULL;
+    struct node *curr = atomic_load(&ll->head);
 
-    free(old_head);
+    int pos = 1;
+    while (curr && pos < index) {
+        prev = curr;
+        curr = curr->next;
+        pos++;
+    }
+
+    if (curr == NULL) {
+        return false;
+    }
+
+    if (prev == NULL) {
+        // this is for removing the first node
+        struct node *old_head;
+        do {
+            old_head = atomic_load(&ll->head);
+            if (old_head == NULL) {
+                return false;
+            }
+        } while (!atomic_compare_exchange_weak(&ll->head,&old_head,old_nead->next));
+
+    } else {
+        // removing any other node
+        prev->next = curr->next;
+        free(curr);
+    }
+    
 	return true;
 }
 
