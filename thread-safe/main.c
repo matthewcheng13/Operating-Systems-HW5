@@ -293,6 +293,62 @@ int add5() {
 	return 0;
 }
 
+int test_add_contains_add_contains() {
+	struct linked_list *ll;
+	pthread_t tid[4];
+
+	// example for calling thread functions
+	ll = ll_create();
+
+	struct args *add_args1 = (struct args *)malloc(sizeof(struct args));
+	add_args1->ll = ll;
+	add_args1->value = 3; // value we are adding
+
+	struct args *contains_args2 = (struct args *)malloc(sizeof(struct args));
+	contains_args2->ll = ll;
+	contains_args2->value = 3;
+	
+	struct args *add_args3 = (struct args *)malloc(sizeof(struct args));
+	add_args3->ll = ll;
+	add_args3->value = 6; // value we are adding
+
+	struct args *contains_args4 = (struct args *)malloc(sizeof(struct args));
+	contains_args4->ll = ll;
+	contains_args4->value = 6;
+
+
+
+	// we need to first create each thread
+	pthread_create(&tid[0], NULL, add_thread, (void *)add_args1);
+	pthread_create(&tid[1], NULL, contains_thread, (void *)contains_args2);
+	pthread_create(&tid[2], NULL, add_thread, (void *)add_args3);
+	pthread_create(&tid[3], NULL, contains_thread, (void *)contains_args4);
+
+	// and then we join all of them to the main thread
+	int *val1;
+	int *val2;
+	pthread_join(tid[0], NULL);
+	pthread_join(tid[1], (void*)&val1);
+	pthread_join(tid[2], NULL);
+	pthread_join(tid[3], (void*)&val2);
+	printf("contains 3 at position: %d \n",*val1);
+	printf("contains 6 at position: %d \n",*val2);
+
+	struct node *cur = ll->head;
+	printf("list: ");
+	while (cur!=NULL) {
+		printf(" %d",cur->val);
+		cur=cur->next;
+		
+	}
+	printf("\n");
+
+	free(cur);
+	free(ll);
+
+	return 0;
+}
+
 
 int
 main(void)
@@ -316,6 +372,10 @@ main(void)
 	printf("Testing Add -> length -> add -> length\n");
 	for(int i=0;i<5;i++) {
 		test_add_length_add_length(); // Running this 5 times will show different results depending on thread run time order
+	}
+	printf("Testing Add -> contains (3) -> add -> contains (6)\n");
+	for(int i=0;i<5;i++) {
+		test_add_contains_add_contains(); // Running this 5 times will show different results depending on thread run time order
 	}
 	return 0;
 	
