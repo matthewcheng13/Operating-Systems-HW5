@@ -1,5 +1,9 @@
 #include "list.h"
 
+/****************************************
+THREADS
+****************************************/
+
 void *add_thread(void *argp) {
 	struct args *add_args = (struct args*)argp;
 	ll_add(add_args->ll, add_args->value);
@@ -38,6 +42,9 @@ void *print_thread(void *argp) {
 	pthread_exit(NULL);
 }
 
+/****************************************
+TESTS
+****************************************/
 
 int test_add_remove() {
 	struct linked_list *ll;
