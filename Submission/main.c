@@ -611,6 +611,329 @@ int test_add_contains_add_contains() {
 	return 0;
 }
 
+int test_add_destroy_remove_destroy() {
+	struct linked_list *ll;
+	pthread_t tid[4];
+
+	// example for calling thread functions
+	ll = ll_create();
+
+	struct args *add_args1 = (struct args *)malloc(sizeof(struct args));
+	add_args1->ll = ll;
+	add_args1->value = 3; // value we are adding
+
+	struct args *contains_args2 = (struct args *)malloc(sizeof(struct args));
+	contains_args2->ll = ll;
+	contains_args2->value = 3;
+	
+	struct args *add_args3 = (struct args *)malloc(sizeof(struct args));
+	add_args3->ll = ll;
+	add_args3->value = 6; // value we are adding
+
+	struct args *contains_args4 = (struct args *)malloc(sizeof(struct args));
+	contains_args4->ll = ll;
+	contains_args4->value = 6;
+
+
+
+	// we need to first create each thread
+	pthread_create(&tid[0], NULL, add_thread, (void *)add_args1);
+	pthread_create(&tid[1], NULL, contains_thread, (void *)contains_args2);
+	pthread_create(&tid[2], NULL, add_thread, (void *)add_args3);
+	pthread_create(&tid[3], NULL, contains_thread, (void *)contains_args4);
+
+	// and then we join all of them to the main thread
+	int *val1;
+	int *val2;
+	pthread_join(tid[0], NULL);
+	pthread_join(tid[1], (void*)&val1);
+	pthread_join(tid[2], NULL);
+	pthread_join(tid[3], (void*)&val2);
+	printf("contains 3 at position: %d \n",*val1);
+	printf("contains 6 at position: %d \n",*val2);
+
+	struct node *cur = ll->head;
+	printf("list: ");
+	while (cur!=NULL) {
+		printf(" %d",cur->val);
+		cur=cur->next;
+		
+	}
+	printf("\n");
+
+	free(cur);
+	free(ll);
+
+	return 0;
+}
+
+int test_add_remove_print() {
+	struct linked_list *ll;
+	pthread_t tid[4];
+
+	// example for calling thread functions
+	ll = ll_create();
+
+	struct args *add_args1 = (struct args *)malloc(sizeof(struct args));
+	add_args1->ll = ll;
+	add_args1->value = 3; // value we are adding
+
+	struct args *contains_args2 = (struct args *)malloc(sizeof(struct args));
+	contains_args2->ll = ll;
+	contains_args2->value = 3;
+	
+	struct args *add_args3 = (struct args *)malloc(sizeof(struct args));
+	add_args3->ll = ll;
+	add_args3->value = 6; // value we are adding
+
+	struct args *contains_args4 = (struct args *)malloc(sizeof(struct args));
+	contains_args4->ll = ll;
+	contains_args4->value = 6;
+
+
+
+	// we need to first create each thread
+	pthread_create(&tid[0], NULL, add_thread, (void *)add_args1);
+	pthread_create(&tid[1], NULL, contains_thread, (void *)contains_args2);
+	pthread_create(&tid[2], NULL, add_thread, (void *)add_args3);
+	pthread_create(&tid[3], NULL, contains_thread, (void *)contains_args4);
+
+	// and then we join all of them to the main thread
+	int *val1;
+	int *val2;
+	pthread_join(tid[0], NULL);
+	pthread_join(tid[1], (void*)&val1);
+	pthread_join(tid[2], NULL);
+	pthread_join(tid[3], (void*)&val2);
+	printf("contains 3 at position: %d \n",*val1);
+	printf("contains 6 at position: %d \n",*val2);
+
+	struct node *cur = ll->head;
+	printf("list: ");
+	while (cur!=NULL) {
+		printf(" %d",cur->val);
+		cur=cur->next;
+		
+	}
+	printf("\n");
+
+	free(cur);
+	free(ll);
+
+	return 0;
+}
+
+int test_overload() {
+	struct linked_list *ll;
+	pthread_t tid[37];
+
+	// example for calling thread functions
+	ll = ll_create();
+
+	struct args *thread_structs[37];
+
+	// initialize each arg struct
+	for (int i = 0; i<37; i++) {
+		thread_structs[i] = (struct args *)malloc(sizeof(struct args));
+		thread_structs[i]->ll = ll;
+		thread_structs[i]->value = 0;
+	}
+
+	// then we set the values we will be adding
+	for (int i = 0; i<10; i++) {
+		thread_structs[i]->value = i;
+	}
+
+	// then we set the values we will be searching for
+	thread_structs[25]->value = 1;
+	thread_structs[26]->value = 3;
+	thread_structs[27]->value = 5;
+	thread_structs[28]->value = 7;
+	thread_structs[29]->value = 4;
+
+	/*struct args *add_args1 = (struct args *)malloc(sizeof(struct args));
+	add_args1->ll = ll;
+	add_args1->value = 1; // value we are adding
+
+	struct args *add_args2 = (struct args *)malloc(sizeof(struct args));
+	add_args1->ll = ll;
+	add_args1->value = 2; // value we are adding
+	
+	struct args *add_args3 = (struct args *)malloc(sizeof(struct args));
+	add_args3->ll = ll;
+	add_args3->value = 3; // value we are adding
+
+	struct args *add_args4 = (struct args *)malloc(sizeof(struct args));
+	add_args1->ll = ll;
+	add_args1->value = 4; // value we are adding
+
+	struct args *add_args5 = (struct args *)malloc(sizeof(struct args));
+	add_args1->ll = ll;
+	add_args1->value = 5; // value we are adding
+
+	struct args *add_args6 = (struct args *)malloc(sizeof(struct args));
+	add_args1->ll = ll;
+	add_args1->value = 6; // value we are adding
+
+	struct args *add_args7 = (struct args *)malloc(sizeof(struct args));
+	add_args1->ll = ll;
+	add_args1->value = 7; // value we are adding
+	
+	struct args *add_args8 = (struct args *)malloc(sizeof(struct args));
+	add_args3->ll = ll;
+	add_args3->value = 8; // value we are adding
+
+	struct args *add_args9 = (struct args *)malloc(sizeof(struct args));
+	add_args1->ll = ll;
+	add_args1->value = 9; // value we are adding
+
+	struct args *add_args10 = (struct args *)malloc(sizeof(struct args));
+	add_args1->ll = ll;
+	add_args1->value = 10; // value we are adding
+
+	struct args *remove_args1 = (struct args *)malloc(sizeof(struct args));
+	remove_args1->ll = ll;
+	remove_args1->value = 0; // index we are removing from
+
+	struct args *remove_args2 = (struct args *)malloc(sizeof(struct args));
+	remove_args1->ll = ll;
+	remove_args1->value = 0; // index we are removing from
+	
+	struct args *remove_args3 = (struct args *)malloc(sizeof(struct args));
+	remove_args3->ll = ll;
+	remove_args3->value = 0; // index we are removing from
+
+	struct args *remove_args4 = (struct args *)malloc(sizeof(struct args));
+	remove_args1->ll = ll;
+	remove_args1->value = 1; // index we are removing from
+
+	struct args *remove_args5 = (struct args *)malloc(sizeof(struct args));
+	remove_args1->ll = ll;
+	remove_args1->value = 0; // index we are removing from
+
+	struct args *remove_args6 = (struct args *)malloc(sizeof(struct args));
+	remove_args1->ll = ll;
+	remove_args1->value = 1; // index we are removing from
+
+	struct args *remove_args7 = (struct args *)malloc(sizeof(struct args));
+	remove_args1->ll = ll;
+	remove_args1->value = 0; // index we are removing from
+	
+	struct args *remove_args8 = (struct args *)malloc(sizeof(struct args));
+	remove_args3->ll = ll;
+	remove_args3->value = 0; // index we are removing from
+
+	struct args *remove_args9 = (struct args *)malloc(sizeof(struct args));
+	remove_args1->ll = ll;
+	remove_args1->value = 0; // index we are removing from
+
+	struct args *remove_args10 = (struct args *)malloc(sizeof(struct args));
+	remove_args1->ll = ll;
+	remove_args1->value = 0; // index we are removing from
+
+	struct args *length_args1 = (struct args *)malloc(sizeof(struct args));
+	length_args1->ll = ll;
+
+	struct args *length_args2 = (struct args *)malloc(sizeof(struct args));
+	length_args1->ll = ll;
+	
+	struct args *length_args3 = (struct args *)malloc(sizeof(struct args));
+	length_args3->ll = ll;
+
+	struct args *length_args4 = (struct args *)malloc(sizeof(struct args));
+	length_args1->ll = ll;
+
+	struct args *length_args5 = (struct args *)malloc(sizeof(struct args));
+	length_args1->ll = ll;
+
+	struct args *contains_args1 = (struct args *)malloc(sizeof(struct args));
+	contains_args1->ll = ll;
+	contains_args1->value = 1; // value we are containsing
+
+	struct args *contains_args2 = (struct args *)malloc(sizeof(struct args));
+	contains_args1->ll = ll;
+	contains_args1->value = 3; // value we are containsing
+	
+	struct args *contains_args3 = (struct args *)malloc(sizeof(struct args));
+	contains_args3->ll = ll;
+	contains_args3->value = 5; // value we are containsing
+
+	struct args *contains_args4 = (struct args *)malloc(sizeof(struct args));
+	contains_args1->ll = ll;
+	contains_args1->value = 7; // value we are containsing
+
+	struct args *contains_args5 = (struct args *)malloc(sizeof(struct args));
+	contains_args1->ll = ll;
+	contains_args1->value = 4; // value we are containsing
+
+	struct args *print_args1 = (struct args *)malloc(sizeof(struct args));
+	print_args1->ll = ll;
+
+	struct args *print_args2 = (struct args *)malloc(sizeof(struct args));
+	print_args1->ll = ll;
+	
+	struct args *print_args3 = (struct args *)malloc(sizeof(struct args));
+	print_args3->ll = ll;
+
+	struct args *print_args4 = (struct args *)malloc(sizeof(struct args));
+	print_args1->ll = ll;
+
+	struct args *print_args5 = (struct args *)malloc(sizeof(struct args));
+	print_args1->ll = ll;
+
+	struct args *destroy_args1 = (struct args *)malloc(sizeof(struct args));
+	destroy_args1->ll = ll;
+
+	struct args *destroy_args2 = (struct args *)malloc(sizeof(struct args));
+	destroy_args1->ll = ll;*/
+
+	/*struct args *add_structs[10] = {add_args1,add_args2,add_args3,add_args4,add_args5,
+									add_args6,add_args7,add_args8,add_args9,add_args10};
+	struct args *remove_structs[10] = {remove_args1,remove_args2,remove_args3,remove_args4,remove_args5,
+									remove_args6,remove_args7,remove_args8,remove_args9,remove_args10};
+	struct args *length_structs[10] = {length_args1,length_args2,length_args3,length_args4,length_args5};
+	struct args *contains_structs[10] = {contains_args1,contains_args2,contains_args3,contains_args4,contains_args5};
+	struct args *print_structs[10] = {print_args1,print_args2,print_args3,print_args4,print_args5};
+	struct args *destroy_structs[10] = {destroy_args1,destroy_args2};	*/
+
+	// we need to first create each thread
+	for (int i = 0; i<10; i++) {
+		pthread_create(&tid[i], NULL, add_thread, (void *)thread_structs[i]);
+	}
+	for (int i = 10; i<20; i++) {
+		pthread_create(&tid[i], NULL, remove_thread, (void *)thread_structs[i]);
+	}
+	for (int i = 20; i<25; i++) {
+		pthread_create(&tid[i], NULL, length_thread, (void *)thread_structs[i]);
+	}
+	for (int i = 25; i<30; i++) {
+		pthread_create(&tid[i], NULL, contains_thread, (void *)thread_structs[i]);
+	}
+	for (int i = 30; i<35; i++) {
+		pthread_create(&tid[i], NULL, print_thread, (void *)thread_structs[i]);
+	}
+	for (int i = 35; i<37; i++) {
+		pthread_create(&tid[i], NULL, destroy_thread, (void *)thread_structs[i]);
+	}
+
+	// and then we join all of them to the main thread
+	for (int i = 0; i<37; i++) {
+		pthread_join(tid[i], NULL);
+	}
+
+	/*struct node *cur = ll->head;
+	printf("list: ");
+	while (cur!=NULL) {
+		printf(" %d",cur->val);
+		cur=cur->next;
+	}
+	printf("\n");*/
+
+	//free(cur);
+	//free(ll);
+
+	return 0;
+}
 
 int
 main(void)
@@ -648,6 +971,11 @@ main(void)
 	printf("Testing Add (3) -> contains (3) -> add (6) -> contains (6)\n");
 	for(int i=0;i<5;i++) {
 		test_add_contains_add_contains(); // Running this 5 times will show different results depending on thread run time order
+	}
+	printf("Testing Overload [Addx10,Removex10,Lengthx5,Containsx5,Printx5,Destroyx2]\n");
+	for(int i=0;i<1;i++) {
+		printf("Iteration %d:",i);
+		test_overload(); // Running this 5 times will show different results depending on thread run time order
 	}
 	return 0;
 	

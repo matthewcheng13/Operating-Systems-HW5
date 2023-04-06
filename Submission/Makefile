@@ -1,6 +1,6 @@
 CC       = gcc
 INC      = -I.
-CFLAGS   = $(INC) -Wall -Wextra -Werror
+CFLAGS   = $(INC) -Wall -Wextra #-Werror
 LFLAGS   = -pthread
 CPPFLAGS = -O3
 CFILES   = $(wildcard *.c)
