@@ -157,6 +157,7 @@ ll_print(struct linked_list *ll)
         curr = curr->next;
     }
     pthread_mutex_unlock(&ll->lock);
+    printf("\n");
 }
 
 #endif

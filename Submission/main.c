@@ -2,7 +2,18 @@
 
 /****************************************
 THREADS
+
+These are functions being used by the
+threads. There is one for each of the
+linked list methods.
 ****************************************/
+
+void *destroy_thread(void *argp) {
+	struct args *destroy_args = (struct args*)argp;
+	ll_destroy(destroy_args->ll);
+
+	return NULL;
+}
 
 void *add_thread(void *argp) {
 	struct args *add_args = (struct args*)argp;
@@ -39,11 +50,257 @@ void *print_thread(void *argp) {
 	struct args *print_args = (struct args*)argp;
 	ll_print(print_args->ll);
 
-	pthread_exit(NULL);
+	return NULL;
 }
 
 /****************************************
-TESTS
+LINKED LIST TESTS
+
+These are threadless tests that ensure
+the linked list still behaves as 
+intended. This section is condensed
+from hw0.
+****************************************/
+
+int test_add() {
+	struct linked_list *ll;
+
+	ll = ll_create();
+
+	printf("Running Add Test\n");
+
+	ll_add(ll,5);
+	ll_print(ll); // should print 5
+	if (ll->head->val != 5) {
+		printf("Add Test Failed\n");
+		return 0;
+	}
+	ll_add(ll,7);
+	ll_add(ll,3);
+	ll_add(ll,1);
+	ll_print(ll); // should print 1 3 7 5
+	int arr1[4] = {1,3,7,5};
+	struct node *curr = ll->head;
+	int i = 0;
+	while (curr && i < 4) {
+		if (curr->val != arr1[i]) {
+			printf("Add Test Failed\n");
+			return 0;
+		}
+		curr = curr->next;
+		i++;
+	}
+	ll_add(ll,2);
+	ll_add(ll,0);
+	ll_add(ll,14);
+	ll_print(ll); // should print 14 0 2 1 3 7 5
+	int arr2[7] = {14,0,2,1,3,7,5};
+	curr = ll->head;
+	i = 0;
+	while (curr && i < 7) {
+		if (curr->val != arr2[i]) {
+			printf("Add Test Failed\n");
+			return 0;
+		}
+		curr = curr->next;
+		i++;
+	}
+	printf("Add Test Passed\n");
+	return 0;
+}
+
+int test_length() {
+	struct linked_list *ll;
+
+	ll = ll_create();
+
+	printf("Running Length Test\n");
+
+	ll_add(ll,5);
+	if (ll_length(ll) != 1) {
+		printf("Length Test Failed\n");
+		return 0;
+	}
+	ll_add(ll,7);
+	ll_add(ll,3);
+	ll_add(ll,1);
+	if (ll_length(ll) != 4) {
+		printf("Length Test Failed\n");
+		return 0;
+	}
+	ll_add(ll,2);
+	ll_add(ll,0);
+	ll_add(ll,14);
+	if (ll_length(ll) != 7) {
+		printf("Length Test Failed\n");
+		return 0;
+	}
+	printf("Length Test Passed\n");
+	return 0;
+}
+
+int test_remove() {
+	struct linked_list *ll;
+
+	ll = ll_create();
+
+	printf("Running Remove Test\n");
+
+	ll_add(ll,5);
+	ll_add(ll,7);
+	ll_remove(ll,0);
+	ll_print(ll); // should print 5
+	if (ll->head->val != 5) {
+		printf("Remove Test Failed\n");
+		return 0;
+	}
+	ll_add(ll,3);
+	ll_add(ll,1);
+	ll_remove(ll,1);
+	ll_print(ll); // should print 1 5
+	int arr1[2] = {1,5};
+	struct node *curr = ll->head;
+	int i = 0;
+	while (curr && i < 2) {
+		if (curr->val != arr1[i]) {
+			printf("Add Test Failed\n");
+			return 0;
+		}
+		curr = curr->next;
+		i++;
+	}
+	ll_add(ll,2);
+	ll_add(ll,0);
+	ll_add(ll,14);
+	ll_remove(ll,3);
+	ll_remove(ll,3);
+	ll_remove(ll,1);
+	ll_print(ll); // should print 14 2
+	int arr2[2] = {14,2};
+	curr = ll->head;
+	i = 0;
+	while (curr && i < 2) {
+		if (curr->val != arr2[i]) {
+			printf("Remove Test Failed\n");
+			return 0;
+		}
+		curr = curr->next;
+		i++;
+	}
+	printf("Remove Test Passed\n");
+	return 0;
+}
+
+int test_contains() {
+	struct linked_list *ll;
+
+	ll = ll_create();
+
+	printf("Running Contains Test\n");
+
+	if (ll_contains(ll,0) != 0) {
+		printf("Contains Test Failed\n");
+		return 0;
+	}
+	if (ll_contains(ll,5) != 0) {
+		printf("Contains Test Failed\n");
+		return 0;
+	}
+	ll_add(ll,5);
+	if (ll_contains(ll,5) != 1) {
+		printf("Contains Test Failed\n");
+		return 0;
+	}
+	ll_add(ll,7);
+	ll_add(ll,3);
+	ll_add(ll,1);
+	ll_remove(ll,3);
+	if (ll_contains(ll,5) != 0) {
+		printf("Contains Test Failed\n");
+		return 0;
+	}
+	int arr1[3] = {1,3,7};
+	struct node *curr = ll->head;
+	int i = 0;
+	ll_print(ll);
+	while (curr && i < 3) {
+		if (ll_contains(ll,arr1[i]) != i+1) {
+			printf("Contains Test Failed\n");
+			return 0;
+		}
+		curr = curr->next;
+		i++;
+	}
+	ll_add(ll,2);
+	ll_add(ll,0);
+	ll_add(ll,14);
+	ll_remove(ll,0);
+	ll_remove(ll,3);
+	if (ll_contains(ll,14) != 0) {
+		printf("Contains Test Failed\n");
+		return 0;
+	}
+	if (ll_contains(ll,3) != 0) {
+		printf("Contains Test Failed\n");
+		return 0;
+	}
+	int arr2[4] = {0,2,1,7};
+	curr = ll->head;
+	i = 0;
+	ll_print(ll);
+	while (curr && i < 4) {
+		if (ll_contains(ll,arr2[i]) != i+1) {
+			printf("Contains Test Failed\n");
+			return 0;
+		}
+		curr = curr->next;
+		i++;
+	}
+	printf("Contains Test Passed\n");
+	return 0;
+}
+
+int test_destroy() {
+	struct linked_list *ll;
+
+	ll = ll_create();
+
+	printf("Running Destroy Test\n");
+
+	if (!ll_destroy(ll)) {
+		printf("Destroy Test Failed\n");
+		return 0;
+	}
+	ll = ll_create();
+	ll_add(ll,5);
+	if (ll_destroy(ll)) {
+		printf("Destroy Test Failed\n");
+		return 0;
+	}
+	ll_remove(ll,0);
+	if (!ll_destroy(ll)) {
+		printf("Destroy Test Failed\n");
+		return 0;
+	}
+	ll = ll_create();
+	ll_add(ll,7);
+	ll_add(ll,3);
+	ll_remove(ll,1);
+	if (ll_destroy(ll)) {
+		printf("Destroy Test Failed\n");
+		return 0;
+	}
+	ll_remove(ll,0);
+	if (!ll_destroy(ll)) {
+		printf("Destroy Test Failed\n");
+		return 0;
+	}
+	printf("Destroy Test Passed\n");
+	return 0;
+}
+
+/****************************************
+THREAD TESTS
 ****************************************/
 
 int test_add_remove() {
@@ -60,8 +317,6 @@ int test_add_remove() {
 	struct args *remove_args2 = (struct args *)malloc(sizeof(struct args));
 	remove_args2->ll = ll;
 	remove_args2->value = 0; // value we are removing at index
-	
-	
 
 	// we need to first create each thread
 	pthread_create(&tid[0], NULL, add_thread, (void *)add_args1);
@@ -361,6 +616,15 @@ int
 main(void)
 {
 	printf("Code for main.c | mutex \n");
+
+	printf("\nRunning Linked List Test Cases:\n");
+	test_add();
+	test_length();
+	test_remove();
+	test_contains();
+	test_destroy();
+
+	printf("\nRunning Thread Test Cases:\n");
 	printf("Testing Add -> Remove\n");
 	for(int i=0;i<10;i++) {
 		test_add_remove(); // Running this 10 times will allow 2 possibilities to happen: add -> remove or remove -> add

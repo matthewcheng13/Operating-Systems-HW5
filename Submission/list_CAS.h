@@ -148,6 +148,7 @@ ll_print(struct linked_list *ll)
         printf("%d ",curr->val);
         curr = curr->next;
     }
+    printf("\n");
 }
 
 #endif

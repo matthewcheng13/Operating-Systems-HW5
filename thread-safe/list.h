@@ -149,6 +149,7 @@ ll_contains(struct linked_list *ll, int value)
 static inline void
 ll_print(struct linked_list *ll)
 {
+    printf("\n");
     pthread_mutex_lock(&ll->lock);
     struct node *curr = ll->head;
 
@@ -157,6 +158,7 @@ ll_print(struct linked_list *ll)
         curr = curr->next;
     }
     pthread_mutex_unlock(&ll->lock);
+    printf("\n");
 }
 
 #endif
