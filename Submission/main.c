@@ -369,19 +369,19 @@ main(void)
 	for(int i=0;i<5;i++) {
 		add5(); // Running this 5 times will allow the nodes to sometimes be added in different orders
 	}
-	printf("Testing Add -> remove -> add -> add -> remove \n");
+	printf("Testing Add (3) -> remove (0) -> add (7) -> add (9) -> remove (1) \n");
 	for(int i=0;i<5;i++) {
 		test_add_remove_add_add_remove(); // Running this 5 times will show different results depending on thread run time order
 	}
-	printf("Testing Add -> add -> remove -> remove \n");
+	printf("Testing Add -> add -> remove (1) -> remove (0)\n");
 	for(int i=0;i<10;i++) {
 		test_add_add_remove1_remove0(); // Running this 10 times will show different results depending on thread run time order
 	}
-	printf("Testing Add -> length -> add -> length\n");
+	printf("Testing Add (3) -> length -> add (6) -> length\n");
 	for(int i=0;i<5;i++) {
 		test_add_length_add_length(); // Running this 5 times will show different results depending on thread run time order
 	}
-	printf("Testing Add -> contains (3) -> add -> contains (6)\n");
+	printf("Testing Add (3) -> contains (3) -> add (6) -> contains (6)\n");
 	for(int i=0;i<5;i++) {
 		test_add_contains_add_contains(); // Running this 5 times will show different results depending on thread run time order
 	}
