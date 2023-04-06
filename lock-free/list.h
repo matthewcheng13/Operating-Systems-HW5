@@ -9,7 +9,7 @@
 
 struct node {
     int val;
-    struct node *next;
+    _Atomic(struct node *) next;
 };
 
 struct linked_list {
@@ -40,24 +40,21 @@ ll_destroy(struct linked_list *ll)
         free(ll);
         return 1;
     }
-    free(old_head);
     return 0;
 }
 
 static inline void
 ll_add(struct linked_list *ll, int value)
 {
-    struct node *new_node = (struct node*) malloc(sizeof(struct node));
+    struct node * new_node = (struct node*) malloc(sizeof(struct node));
 
     new_node->val = value;
-    new_node->next = ll->head;
 
     struct node *old_head;
     do {
         old_head = atomic_load(&ll->head);
         new_node->next = old_head;
     } while (!atomic_compare_exchange_weak(&ll->head, &old_head, new_node));
-    free(old_head);
 }
 
 static inline int
@@ -109,8 +106,13 @@ ll_remove(struct linked_list *ll, int index)
 
     } else {
         // removing any other node
-        prev->next = curr->next;
-        free(curr);
+        struct node *old_next;
+        do {
+            old_next = atomic_load(&curr->next);
+            if (old_next == NULL) {
+                return false;
+            }
+        } while (!atomic_compare_exchange_weak(&prev->next, &curr, old_next));
     }
     
 	return true;
