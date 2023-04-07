@@ -54,7 +54,7 @@ ll_add(struct linked_list *ll, int value)
     do {
         old_head = atomic_load(&ll->head);
         new_node->next = old_head;
-    } while (!atomic_compare_exchange_weak(&ll->head, &old_head, new_node));
+    } while (!atomic_compare_exchange_strong(&ll->head, &old_head, new_node));
 }
 
 static inline int
@@ -77,13 +77,15 @@ ll_length(struct linked_list *ll)
 static inline bool
 ll_remove(struct linked_list *ll, int index)
 {
-    /*if (ll->head == NULL) {
-        return false;
-    }*/
     struct node *prev = NULL;
     struct node *curr = atomic_load(&ll->head);
 
-    int pos = 1;
+    if (curr == NULL) {
+        return 0;
+    }  
+
+    int pos = 0;
+
     while (curr && pos < index) {
         prev = curr;
         curr = curr->next;
@@ -102,7 +104,7 @@ ll_remove(struct linked_list *ll, int index)
             if (old_head == NULL) {
                 return false;
             }
-        } while (!atomic_compare_exchange_weak(&ll->head,&old_head,old_head->next));
+        } while (!atomic_compare_exchange_strong(&ll->head,&old_head,old_head->next));
 
     } else {
         // removing any other node
@@ -112,7 +114,7 @@ ll_remove(struct linked_list *ll, int index)
             if (old_next == NULL) {
                 return false;
             }
-        } while (!atomic_compare_exchange_weak(&prev->next, &curr, old_next));
+        } while (!atomic_compare_exchange_strong(&prev->next, &curr, old_next));
     }
     
 	return true;
@@ -121,11 +123,12 @@ ll_remove(struct linked_list *ll, int index)
 static inline int
 ll_contains(struct linked_list *ll, int value)
 {
-    /*if (!ll->head) {
-        return 0;
-    }*/
-
     struct node *curr = atomic_load(&ll->head);
+
+    if (curr == NULL) {
+        return 0;
+    }
+
     int pos = 1;
 
     while (curr) {
