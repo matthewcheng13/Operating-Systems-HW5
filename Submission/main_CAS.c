@@ -312,7 +312,7 @@ int test_add_remove() {
 	struct linked_list *ll;
 	pthread_t tid[2];
 
-	// example for calling thread functions
+	
 	ll = ll_create();
 
 	struct args *add_args1 = (struct args *)malloc(sizeof(struct args));
@@ -352,7 +352,7 @@ int test_add_add_remove1_remove0() {
 	struct linked_list *ll;
 	pthread_t tid[4];
 
-	// example for calling thread functions
+	
 	ll = ll_create();
 
 	struct args *add_args1 = (struct args *)malloc(sizeof(struct args));
@@ -403,7 +403,7 @@ int test_add_length_add_length() {
 	struct linked_list *ll;
 	pthread_t tid[4];
 
-	// example for calling thread functions
+	
 	ll = ll_create();
 
 	struct args *add_args1 = (struct args *)malloc(sizeof(struct args));
@@ -458,7 +458,7 @@ int test_add_remove_add_add_remove() {
 	struct linked_list *ll;
 	pthread_t tid[5];
 
-	// example for calling thread functions
+	
 	ll = ll_create();
 
 	struct args *add_args1 = (struct args *)malloc(sizeof(struct args));
@@ -511,7 +511,7 @@ int add5() {
 	struct linked_list *ll;
 	pthread_t tid[5];
 
-	// example for calling thread functions
+	
 	ll = ll_create();
 
 	struct args *add_args1 = (struct args *)malloc(sizeof(struct args));
@@ -558,7 +558,7 @@ int test_add_contains_add_contains() {
 	struct linked_list *ll;
 	pthread_t tid[4];
 
-	// example for calling thread functions
+	
 	ll = ll_create();
 
 	struct args *add_args1 = (struct args *)malloc(sizeof(struct args));
@@ -632,8 +632,6 @@ int test_add_remove_destroy() {
 
 	printf("succsss of destroy: %d \n",*res);
 
-	//free(ll);
-
 	return 0;
 }
 
@@ -641,7 +639,6 @@ int test_add_remove_print() {
 	struct linked_list *ll;
 	pthread_t tid[9];
 
-	// example for calling thread functions
 	ll = ll_create();
 
 	struct args *add_args1 = (struct args *)malloc(sizeof(struct args));
@@ -692,16 +689,16 @@ int test_add_remove_print() {
 		pthread_join(tid[i], NULL);
 	}
 
-	// struct node *cur = ll->head;
-	// printf("list: ");
-	// while (cur!=NULL) {
-	// 	printf(" %d",cur->val);
-	// 	cur=cur->next;
+	struct node *cur = ll->head;
+	printf("list: ");
+	while (cur!=NULL) {
+		printf(" %d",cur->val);
+		cur=cur->next;
 		
-	// }
-	// printf("\n");
+	}
+	printf("\n");
 
-	// free(cur);
+	free(cur);
 	free(ll);
 
 	return 0;
@@ -711,7 +708,6 @@ int test_overload() {
 	struct linked_list *ll;
 	pthread_t tid[36];
 
-	// example for calling thread functions
 	ll = ll_create();
 
 	struct args *thread_structs[36];
@@ -760,17 +756,6 @@ int test_overload() {
 	for (int i = 0; i<36; i++) {
 		pthread_join(tid[i], NULL);
 	}
-
-	/*struct node *cur = ll->head;
-	printf("list: ");
-	while (cur!=NULL) {
-		printf(" %d",cur->val);
-		cur=cur->next;
-	}
-	printf("\n");*/
-
-	//free(cur);
-	//free(ll);
 
 	return 0;
 }

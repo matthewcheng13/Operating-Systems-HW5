@@ -311,7 +311,6 @@ int test_add_remove() {
 	struct linked_list *ll;
 	pthread_t tid[2];
 
-	// example for calling thread functions
 	ll = ll_create();
 
 	struct args *add_args1 = (struct args *)malloc(sizeof(struct args));
@@ -349,7 +348,6 @@ int test_add_add_remove1_remove0() {
 	struct linked_list *ll;
 	pthread_t tid[4];
 
-	// example for calling thread functions
 	ll = ll_create();
 
 	struct args *add_args1 = (struct args *)malloc(sizeof(struct args));
@@ -367,8 +365,6 @@ int test_add_add_remove1_remove0() {
 	struct args *remove_args4 = (struct args *)malloc(sizeof(struct args));
 	remove_args4->ll = ll;
 	remove_args4->value = 0; // value we are adding
-
-
 
 	// we need to first create each thread
 	pthread_create(&tid[0], NULL, add_thread, (void *)add_args1);
@@ -400,7 +396,7 @@ int test_add_length_add_length() {
 	struct linked_list *ll;
 	pthread_t tid[4];
 
-	// example for calling thread functions
+	
 	ll = ll_create();
 
 	struct args *add_args1 = (struct args *)malloc(sizeof(struct args));
@@ -455,7 +451,7 @@ int test_add_remove_add_add_remove() {
 	struct linked_list *ll;
 	pthread_t tid[5];
 
-	// example for calling thread functions
+	
 	ll = ll_create();
 
 	struct args *add_args1 = (struct args *)malloc(sizeof(struct args));
@@ -508,7 +504,7 @@ int add5() {
 	struct linked_list *ll;
 	pthread_t tid[5];
 
-	// example for calling thread functions
+	
 	ll = ll_create();
 
 	struct args *add_args1 = (struct args *)malloc(sizeof(struct args));
@@ -563,7 +559,7 @@ int test_add_contains_add_contains() {
 	struct linked_list *ll;
 	pthread_t tid[4];
 
-	// example for calling thread functions
+	
 	ll = ll_create();
 
 	struct args *add_args1 = (struct args *)malloc(sizeof(struct args));
@@ -645,8 +641,6 @@ int test_add_remove_destroy() {
 
 	printf("succsss of destroy: %d \n",*res);
 
-	//free(ll);
-
 	return 0;
 }
 
@@ -654,7 +648,7 @@ int test_add_remove_print() {
 	struct linked_list *ll;
 	pthread_t tid[9];
 
-	// example for calling thread functions
+	
 	ll = ll_create();
 
 	struct args *add_args1 = (struct args *)malloc(sizeof(struct args));
@@ -714,8 +708,8 @@ int test_add_remove_print() {
 	}
 	printf("\n");
 
-	//free(cur);
-	//free(ll);
+	free(cur);
+	free(ll);
 
 	return 0;
 }
@@ -724,7 +718,7 @@ int test_overload() {
 	struct linked_list *ll;
 	pthread_t tid[36];
 
-	// example for calling thread functions
+	
 	ll = ll_create();
 
 	struct args *thread_structs[36];
@@ -773,17 +767,6 @@ int test_overload() {
 	for (int i = 0; i<36; i++) {
 		pthread_join(tid[i], NULL);
 	}
-
-	/*struct node *cur = ll->head;
-	printf("list: ");
-	while (cur!=NULL) {
-		printf(" %d",cur->val);
-		cur=cur->next;
-	}
-	printf("\n");*/
-
-	//free(cur);
-	//free(ll);
 
 	return 0;
 }
@@ -835,7 +818,7 @@ main(void)
 	}
 	printf("Testing Overload [Addx10,Removex10,Lengthx5,Containsx5,Printx5,Destroyx2]\n");
 	for(int i=0;i<5;i++) {
-		printf("Iteration %d:",i);
+		printf("Iteration %d:\n",i);
 		test_overload(); // Running this 5 times will show different results depending on thread run time order
 	}
 	return 0;
