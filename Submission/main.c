@@ -645,7 +645,7 @@ int test_add_remove_destroy() {
 
 	printf("succsss of destroy: %d \n",*res);
 
-	free(ll);
+	//free(ll);
 
 	return 0;
 }
@@ -714,8 +714,8 @@ int test_add_remove_print() {
 	}
 	printf("\n");
 
-	free(cur);
-	free(ll);
+	//free(cur);
+	//free(ll);
 
 	return 0;
 }
@@ -976,7 +976,7 @@ main(void)
 		test_add_remove_print(); // Running this 5 times will show different results depending on thread run time order
 	}
 	printf("Testing Overload [Addx10,Removex10,Lengthx5,Containsx5,Printx5,Destroyx2]\n");
-	for(int i=0;i<1;i++) {
+	for(int i=0;i<5;i++) {
 		printf("Iteration %d:",i);
 		test_overload(); // Running this 5 times will show different results depending on thread run time order
 	}

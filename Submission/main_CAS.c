@@ -632,7 +632,7 @@ int test_add_remove_destroy() {
 
 	printf("succsss of destroy: %d \n",*res);
 
-	free(ll);
+	//free(ll);
 
 	return 0;
 }
@@ -692,17 +692,17 @@ int test_add_remove_print() {
 		pthread_join(tid[i], NULL);
 	}
 
-	struct node *cur = ll->head;
-	printf("list: ");
-	while (cur!=NULL) {
-		printf(" %d",cur->val);
-		cur=cur->next;
+	// struct node *cur = ll->head;
+	// printf("list: ");
+	// while (cur!=NULL) {
+	// 	printf(" %d",cur->val);
+	// 	cur=cur->next;
 		
-	}
-	printf("\n");
+	// }
+	// printf("\n");
 
-	free(cur);
-	free(ll);
+	// free(cur);
+	// free(ll);
 
 	return 0;
 }
