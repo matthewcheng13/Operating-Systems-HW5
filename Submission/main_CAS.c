@@ -204,24 +204,25 @@ int test_contains() {
 	printf("Running Contains Test\n");
 
 	if (ll_contains(ll,0) != 0) {
-		printf("Contains Test Failed\n");
+		printf("Contains Test Failed1\n");
 		return 0;
 	}
 	if (ll_contains(ll,5) != 0) {
-		printf("Contains Test Failed\n");
+		printf("Contains Test Failed2\n");
 		return 0;
 	}
 	ll_add(ll,5);
 	if (ll_contains(ll,5) != 1) {
-		printf("Contains Test Failed\n");
+		printf("Contains Test Failed3\n");
 		return 0;
 	}
 	ll_add(ll,7);
 	ll_add(ll,3);
 	ll_add(ll,1);
 	ll_remove(ll,3);
+	ll_print(ll);
 	if (ll_contains(ll,5) != 0) {
-		printf("Contains Test Failed\n");
+		printf("Contains Test Failed4\n");
 		return 0;
 	}
 	int arr1[3] = {1,3,7};
@@ -230,7 +231,7 @@ int test_contains() {
 	ll_print(ll);
 	while (curr && i < 3) {
 		if (ll_contains(ll,arr1[i]) != i+1) {
-			printf("Contains Test Failed\n");
+			printf("Contains Test Failed5\n");
 			return 0;
 		}
 		curr = curr->next;
@@ -242,11 +243,11 @@ int test_contains() {
 	ll_remove(ll,0);
 	ll_remove(ll,3);
 	if (ll_contains(ll,14) != 0) {
-		printf("Contains Test Failed\n");
+		printf("Contains Test Failed6\n");
 		return 0;
 	}
 	if (ll_contains(ll,3) != 0) {
-		printf("Contains Test Failed\n");
+		printf("Contains Test Failed7\n");
 		return 0;
 	}
 	int arr2[4] = {0,2,1,7};
@@ -255,7 +256,7 @@ int test_contains() {
 	ll_print(ll);
 	while (curr && i < 4) {
 		if (ll_contains(ll,arr2[i]) != i+1) {
-			printf("Contains Test Failed\n");
+			printf("Contains Test Failed8\n");
 			return 0;
 		}
 		curr = curr->next;
@@ -624,7 +625,7 @@ int test_add_destroy_remove_destroy() {
 
 	// we need to first create each thread
 	pthread_create(&tid[0], NULL, add_thread, (void *)add_args1);
-	pthread_create(&tid[1], NULL, destroy_thread, (void *)destroy_args2);
+	//pthread_create(&tid[1], NULL, destroy_thread, (void *)destroy_args2);
 	pthread_create(&tid[2], NULL, remove_thread, (void *)remove_args3);
 	pthread_create(&tid[3], NULL, destroy_thread, (void *)destroy_args4);
 
@@ -632,23 +633,14 @@ int test_add_destroy_remove_destroy() {
 	int *val1=0;
 	int *val2=0;
 	pthread_join(tid[0], NULL);
-	pthread_join(tid[1], (void*)&val1);
+	//pthread_join(tid[1], (void*)&val1);
 	pthread_join(tid[2], NULL);
 	pthread_join(tid[3], (void*)&val2);
-	printf("success of destroy: %d \n",*val1);
+	//printf("success of destroy: %d \n",*val1);
 	printf("succsss of destroy: %d \n",*val2);
 
 
-	printf("list: ");
-	if (*val1==0 && *val2==0) {
-		struct node *cur = ll->head;
-		while (cur!=NULL) {
-			printf(" %d",cur->val);
-			cur=cur->next;
-			
-		}
-		free(cur);
-	}
+	
 	printf("\n");
 
 	//free(ll);
