@@ -10,12 +10,14 @@ linked list methods.
 
 void *destroy_thread(void *argp) {
     struct args *destroy_args = (struct args*)argp;
+	int *iptr = (int *)malloc(sizeof(int));
+	*iptr = ll_destroy(destroy_args->ll);
     if (destroy_args == NULL) {
-        return NULL;
+        return iptr;
     }
-    ll_destroy(destroy_args->ll);
+    
 
-    return NULL;
+    return iptr;
 }
 
 void *add_thread(void *argp) {
@@ -627,8 +629,8 @@ int test_add_destroy_remove_destroy() {
 	pthread_create(&tid[3], NULL, destroy_thread, (void *)destroy_args4);
 
 	// and then we join all of them to the main thread
-	int *val1;
-	int *val2;
+	int *val1=0;
+	int *val2=0;
 	pthread_join(tid[0], NULL);
 	pthread_join(tid[1], (void*)&val1);
 	pthread_join(tid[2], NULL);
@@ -638,7 +640,7 @@ int test_add_destroy_remove_destroy() {
 
 
 	printf("list: ");
-	if (*val1 || *val2) {
+	if (*val1==0 && *val2==0) {
 		struct node *cur = ll->head;
 		while (cur!=NULL) {
 			printf(" %d",cur->val);
@@ -649,7 +651,7 @@ int test_add_destroy_remove_destroy() {
 	}
 	printf("\n");
 
-	free(ll);
+	//free(ll);
 
 	return 0;
 }

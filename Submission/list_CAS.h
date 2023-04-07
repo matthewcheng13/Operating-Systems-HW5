@@ -35,9 +35,13 @@ ll_create(void)
 static inline int
 ll_destroy(struct linked_list *ll)
 {
+    if (ll == NULL) {
+        return 0;
+    }
     struct node *old_head = atomic_load(&ll->head);
     if (old_head == NULL) {
         free(ll);
+        ll = NULL;
         return 1;
     }
     return 0;
