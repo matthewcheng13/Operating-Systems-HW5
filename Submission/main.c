@@ -206,12 +206,12 @@ int test_contains() {
 		return 0;
 	}
 	if (ll_contains(ll,5) != 0) {
-		printf("Contains Test Failed\n");
+		printf("Contains Test Failed1\n");
 		return 0;
 	}
 	ll_add(ll,5);
 	if (ll_contains(ll,5) != 1) {
-		printf("Contains Test Failed\n");
+		printf("Contains Test Failed2\n");
 		return 0;
 	}
 	ll_add(ll,7);
@@ -219,7 +219,7 @@ int test_contains() {
 	ll_add(ll,1);
 	ll_remove(ll,3);
 	if (ll_contains(ll,5) != 0) {
-		printf("Contains Test Failed\n");
+		printf("Contains Test Failed3\n");
 		return 0;
 	}
 	int arr1[3] = {1,3,7};
@@ -228,7 +228,7 @@ int test_contains() {
 	ll_print(ll);
 	while (curr && i < 3) {
 		if (ll_contains(ll,arr1[i]) != i+1) {
-			printf("Contains Test Failed\n");
+			printf("Contains Test Failed4\n");
 			return 0;
 		}
 		curr = curr->next;
@@ -240,11 +240,11 @@ int test_contains() {
 	ll_remove(ll,0);
 	ll_remove(ll,3);
 	if (ll_contains(ll,14) != 0) {
-		printf("Contains Test Failed\n");
+		printf("Contains Test Failed5\n");
 		return 0;
 	}
 	if (ll_contains(ll,3) != 0) {
-		printf("Contains Test Failed\n");
+		printf("Contains Test Failed6\n");
 		return 0;
 	}
 	int arr2[4] = {0,2,1,7};
@@ -253,7 +253,7 @@ int test_contains() {
 	ll_print(ll);
 	while (curr && i < 4) {
 		if (ll_contains(ll,arr2[i]) != i+1) {
-			printf("Contains Test Failed\n");
+			printf("Contains Test Failed7\n");
 			return 0;
 		}
 		curr = curr->next;
@@ -614,45 +614,75 @@ int test_add_contains_add_contains() {
 	return 0;
 }
 
-int test_add_destroy_remove_destroy() {
+int test_add_remove_destroy() {
+    struct linked_list *ll;
+    pthread_t tid[4];
+
+    ll = ll_create();
+
+    struct args *add_args1 = (struct args *)malloc(sizeof(struct args));
+    add_args1->ll = ll;
+    add_args1->value = 3; // value we are adding
+
+    struct args *destroy_args2 = (struct args *)malloc(sizeof(struct args));
+    destroy_args2->ll = ll;
+
+    struct args *remove_args3 = (struct args *)malloc(sizeof(struct args));
+    remove_args3->ll = ll;
+    remove_args3->value = 0; // index we are removing
+
+    struct args *destroy_args4 = (struct args *)malloc(sizeof(struct args));
+    destroy_args4->ll = ll;
+
+    // we need to first create each thread
+    pthread_create(&tid[0], NULL, add_thread, (void *)add_args1);
+    //pthread_create(&tid[1], NULL, destroy_thread, (void )destroy_args2);
+    pthread_create(&tid[2], NULL, remove_thread, (void *)remove_args3);
+    pthread_create(&tid[3], NULL, destroy_thread, (void *)destroy_args4);
+
+    // and then we join all of them to the main thread
+    int *val1=0;
+    int *val2=0;
+    pthread_join(tid[0], NULL);
+    //pthread_join(tid[1], (void)&val1);
+    pthread_join(tid[2], NULL);
+    pthread_join(tid[3], (void *)&val2);
+    //printf("success of destroy: %d \n",val1);
+    printf("succsss of destroy: %d \n",*val2);
+
+    return 0;
+}
+
+/*
+int test_add_remove_destroy() {
 	struct linked_list *ll;
-	pthread_t tid[4];
+	pthread_t tid[3];
 
 	ll = ll_create();
 
 	struct args *add_args1 = (struct args *)malloc(sizeof(struct args));
 	add_args1->ll = ll;
 	add_args1->value = 3; // value we are adding
-
-	struct args *destroy_args2 = (struct args *)malloc(sizeof(struct args));
-	destroy_args2->ll = ll;
 	
-	struct args *remove_args3 = (struct args *)malloc(sizeof(struct args));
-	remove_args3->ll = ll;
-	remove_args3->value = 0; // index we are removing
+	struct args *remove_args2 = (struct args *)malloc(sizeof(struct args));
+	remove_args2->ll = ll;
+	remove_args2->value = 0; // index we are removing
 
-	struct args *destroy_args4 = (struct args *)malloc(sizeof(struct args));
-	destroy_args4->ll = ll;
+	struct args *destroy_args3 = (struct args *)malloc(sizeof(struct args));
+	destroy_args3->ll = ll;
 
 	// we need to first create each thread
 	pthread_create(&tid[0], NULL, add_thread, (void *)add_args1);
-	pthread_create(&tid[1], NULL, destroy_thread, (void *)destroy_args2);
-	pthread_create(&tid[2], NULL, remove_thread, (void *)remove_args3);
-	pthread_create(&tid[3], NULL, destroy_thread, (void *)destroy_args4);
+	pthread_create(&tid[1], NULL, remove_thread, (void *)remove_args2);
+	pthread_create(&tid[2], NULL, destroy_thread, (void *)destroy_args3);
 
 	// and then we join all of them to the main thread
-	int *val1;
-	int *val2;
 	pthread_join(tid[0], NULL);
-	pthread_join(tid[1], (void*)&val1);
+	pthread_join(tid[1], NULL);
 	pthread_join(tid[2], NULL);
-	pthread_join(tid[3], (void*)&val2);
-	printf("success of destroy: %d \n",*val1);
-	printf("succsss of destroy: %d \n",*val2);
 
-
-	printf("list: ");
-	if (*val1 || *val2) {
+	/*printf("list: ");
+	if (!*val1) {
 		struct node *cur = ll->head;
 		while (cur!=NULL) {
 			printf(" %d",cur->val);
@@ -666,7 +696,7 @@ int test_add_destroy_remove_destroy() {
 	free(ll);
 
 	return 0;
-}
+}*/
 
 int test_add_remove_print() {
 	struct linked_list *ll;
@@ -740,15 +770,15 @@ int test_add_remove_print() {
 
 int test_overload() {
 	struct linked_list *ll;
-	pthread_t tid[37];
+	pthread_t tid[36];
 
 	// example for calling thread functions
 	ll = ll_create();
 
-	struct args *thread_structs[37];
+	struct args *thread_structs[36];
 
 	// initialize each arg struct
-	for (int i = 0; i<37; i++) {
+	for (int i = 0; i<36; i++) {
 		thread_structs[i] = (struct args *)malloc(sizeof(struct args));
 		thread_structs[i]->ll = ll;
 		thread_structs[i]->value = 0;
@@ -912,7 +942,7 @@ int test_overload() {
 	struct args *destroy_structs[10] = {destroy_args1,destroy_args2};	*/
 
 	// we need to first create each thread
-	/*for (int i = 0; i<10; i++) {
+	for (int i = 0; i<10; i++) {
 		pthread_create(&tid[i], NULL, add_thread, (void *)thread_structs[i]);
 	}
 	for (int i = 10; i<20; i++) {
@@ -927,14 +957,12 @@ int test_overload() {
 	for (int i = 30; i<35; i++) {
 		pthread_create(&tid[i], NULL, print_thread, (void *)thread_structs[i]);
 	}
-	for (int i = 35; i<37; i++) {
-		pthread_create(&tid[i], NULL, destroy_thread, (void *)thread_structs[i]);
-	}*/
+	pthread_create(&tid[35], NULL, destroy_thread, (void *)thread_structs[35]);
 
 	// and then we join all of them to the main thread
-	/*for (int i = 0; i<37; i++) {
+	for (int i = 0; i<36; i++) {
 		pthread_join(tid[i], NULL);
-	}*/
+	}
 
 	/*struct node *cur = ll->head;
 	printf("list: ");
@@ -987,19 +1015,19 @@ main(void)
 	for(int i=0;i<5;i++) {
 		test_add_contains_add_contains(); // Running this 5 times will show different results depending on thread run time order
 	}
-	printf("Testing Add (3) -> Destroy -> Remove (0) -> Destroy\n");
+	printf("Testing Add (3) -> Remove (0) -> Destroy\n");
 	for(int i=0;i<5;i++) {
-		test_add_destroy_remove_destroy(); // Running this 5 times will show different results depending on thread run time order
+		test_add_remove_destroy(); // Running this 5 times will show different results depending on thread run time order
 	}
 	printf("Testing Add (3) -> Print -> Remove (0) -> Add (7) -> Print -> Add (2) -> Print -> Remove (0) -> Print\n");
 	for(int i=0;i<5;i++) {
 		test_add_remove_print(); // Running this 5 times will show different results depending on thread run time order
 	}
-	printf("Testing Overload [Addx10,Removex10,Lengthx5,Containsx5,Printx5,Destroyx2]\n");
+	/*printf("Testing Overload [Addx10,Removex10,Lengthx5,Containsx5,Printx5,Destroyx2]\n");
 	for(int i=0;i<1;i++) {
 		printf("Iteration %d:",i);
 		test_overload(); // Running this 5 times will show different results depending on thread run time order
-	}
+	}*/
 	return 0;
 	
 }

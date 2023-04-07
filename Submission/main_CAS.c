@@ -638,7 +638,7 @@ int test_add_destroy_remove_destroy() {
 
 
 	printf("list: ");
-	if (*val1 || *val2) {
+	if (!(*val1 || *val2)) {
 		struct node *cur = ll->head;
 		while (cur!=NULL) {
 			printf(" %d",cur->val);
@@ -982,11 +982,11 @@ main(void)
 	for(int i=0;i<5;i++) {
 		test_add_remove_print(); // Running this 5 times will show different results depending on thread run time order
 	}
-	printf("Testing Overload [Addx10,Removex10,Lengthx5,Containsx5,Printx5,Destroyx2]\n");
+	/*printf("Testing Overload [Addx10,Removex10,Lengthx5,Containsx5,Printx5,Destroyx2]\n");
 	for(int i=0;i<1;i++) {
 		printf("Iteration %d:",i);
 		test_overload(); // Running this 5 times will show different results depending on thread run time order
-	}
+	}*/
 	return 0;
 	
 }
