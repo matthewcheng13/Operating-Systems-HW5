@@ -742,172 +742,30 @@ int test_overload() {
 	}
 
 	// then we set the values we will be searching for
-	thread_structs[25]->value = 1;
-	thread_structs[26]->value = 3;
-	thread_structs[27]->value = 5;
-	thread_structs[28]->value = 7;
-	thread_structs[29]->value = 4;
-
-	/*struct args *add_args1 = (struct args *)malloc(sizeof(struct args));
-	add_args1->ll = ll;
-	add_args1->value = 1; // value we are adding
-
-	struct args *add_args2 = (struct args *)malloc(sizeof(struct args));
-	add_args1->ll = ll;
-	add_args1->value = 2; // value we are adding
-	
-	struct args *add_args3 = (struct args *)malloc(sizeof(struct args));
-	add_args3->ll = ll;
-	add_args3->value = 3; // value we are adding
-
-	struct args *add_args4 = (struct args *)malloc(sizeof(struct args));
-	add_args1->ll = ll;
-	add_args1->value = 4; // value we are adding
-
-	struct args *add_args5 = (struct args *)malloc(sizeof(struct args));
-	add_args1->ll = ll;
-	add_args1->value = 5; // value we are adding
-
-	struct args *add_args6 = (struct args *)malloc(sizeof(struct args));
-	add_args1->ll = ll;
-	add_args1->value = 6; // value we are adding
-
-	struct args *add_args7 = (struct args *)malloc(sizeof(struct args));
-	add_args1->ll = ll;
-	add_args1->value = 7; // value we are adding
-	
-	struct args *add_args8 = (struct args *)malloc(sizeof(struct args));
-	add_args3->ll = ll;
-	add_args3->value = 8; // value we are adding
-
-	struct args *add_args9 = (struct args *)malloc(sizeof(struct args));
-	add_args1->ll = ll;
-	add_args1->value = 9; // value we are adding
-
-	struct args *add_args10 = (struct args *)malloc(sizeof(struct args));
-	add_args1->ll = ll;
-	add_args1->value = 10; // value we are adding
-
-	struct args *remove_args1 = (struct args *)malloc(sizeof(struct args));
-	remove_args1->ll = ll;
-	remove_args1->value = 0; // index we are removing from
-
-	struct args *remove_args2 = (struct args *)malloc(sizeof(struct args));
-	remove_args1->ll = ll;
-	remove_args1->value = 0; // index we are removing from
-	
-	struct args *remove_args3 = (struct args *)malloc(sizeof(struct args));
-	remove_args3->ll = ll;
-	remove_args3->value = 0; // index we are removing from
-
-	struct args *remove_args4 = (struct args *)malloc(sizeof(struct args));
-	remove_args1->ll = ll;
-	remove_args1->value = 1; // index we are removing from
-
-	struct args *remove_args5 = (struct args *)malloc(sizeof(struct args));
-	remove_args1->ll = ll;
-	remove_args1->value = 0; // index we are removing from
-
-	struct args *remove_args6 = (struct args *)malloc(sizeof(struct args));
-	remove_args1->ll = ll;
-	remove_args1->value = 1; // index we are removing from
-
-	struct args *remove_args7 = (struct args *)malloc(sizeof(struct args));
-	remove_args1->ll = ll;
-	remove_args1->value = 0; // index we are removing from
-	
-	struct args *remove_args8 = (struct args *)malloc(sizeof(struct args));
-	remove_args3->ll = ll;
-	remove_args3->value = 0; // index we are removing from
-
-	struct args *remove_args9 = (struct args *)malloc(sizeof(struct args));
-	remove_args1->ll = ll;
-	remove_args1->value = 0; // index we are removing from
-
-	struct args *remove_args10 = (struct args *)malloc(sizeof(struct args));
-	remove_args1->ll = ll;
-	remove_args1->value = 0; // index we are removing from
-
-	struct args *length_args1 = (struct args *)malloc(sizeof(struct args));
-	length_args1->ll = ll;
-
-	struct args *length_args2 = (struct args *)malloc(sizeof(struct args));
-	length_args1->ll = ll;
-	
-	struct args *length_args3 = (struct args *)malloc(sizeof(struct args));
-	length_args3->ll = ll;
-
-	struct args *length_args4 = (struct args *)malloc(sizeof(struct args));
-	length_args1->ll = ll;
-
-	struct args *length_args5 = (struct args *)malloc(sizeof(struct args));
-	length_args1->ll = ll;
-
-	struct args *contains_args1 = (struct args *)malloc(sizeof(struct args));
-	contains_args1->ll = ll;
-	contains_args1->value = 1; // value we are containsing
-
-	struct args *contains_args2 = (struct args *)malloc(sizeof(struct args));
-	contains_args1->ll = ll;
-	contains_args1->value = 3; // value we are containsing
-	
-	struct args *contains_args3 = (struct args *)malloc(sizeof(struct args));
-	contains_args3->ll = ll;
-	contains_args3->value = 5; // value we are containsing
-
-	struct args *contains_args4 = (struct args *)malloc(sizeof(struct args));
-	contains_args1->ll = ll;
-	contains_args1->value = 7; // value we are containsing
-
-	struct args *contains_args5 = (struct args *)malloc(sizeof(struct args));
-	contains_args1->ll = ll;
-	contains_args1->value = 4; // value we are containsing
-
-	struct args *print_args1 = (struct args *)malloc(sizeof(struct args));
-	print_args1->ll = ll;
-
-	struct args *print_args2 = (struct args *)malloc(sizeof(struct args));
-	print_args1->ll = ll;
-	
-	struct args *print_args3 = (struct args *)malloc(sizeof(struct args));
-	print_args3->ll = ll;
-
-	struct args *print_args4 = (struct args *)malloc(sizeof(struct args));
-	print_args1->ll = ll;
-
-	struct args *print_args5 = (struct args *)malloc(sizeof(struct args));
-	print_args1->ll = ll;
-
-	struct args *destroy_args1 = (struct args *)malloc(sizeof(struct args));
-	destroy_args1->ll = ll;
-
-	struct args *destroy_args2 = (struct args *)malloc(sizeof(struct args));
-	destroy_args1->ll = ll;*/
-
-	/*struct args *add_structs[10] = {add_args1,add_args2,add_args3,add_args4,add_args5,
-									add_args6,add_args7,add_args8,add_args9,add_args10};
-	struct args *remove_structs[10] = {remove_args1,remove_args2,remove_args3,remove_args4,remove_args5,
-									remove_args6,remove_args7,remove_args8,remove_args9,remove_args10};
-	struct args *length_structs[10] = {length_args1,length_args2,length_args3,length_args4,length_args5};
-	struct args *contains_structs[10] = {contains_args1,contains_args2,contains_args3,contains_args4,contains_args5};
-	struct args *print_structs[10] = {print_args1,print_args2,print_args3,print_args4,print_args5};
-	struct args *destroy_structs[10] = {destroy_args1,destroy_args2};	*/
+	thread_structs[12]->value = 3;
+	thread_structs[16]->value = 7;
+	thread_structs[20]->value = 2;
+	thread_structs[24]->value = 5;
+	thread_structs[28]->value = 1;
 
 	// we need to first create each thread
 	for (int i = 0; i<10; i++) {
 		pthread_create(&tid[i], NULL, add_thread, (void *)thread_structs[i]);
 	}
-	for (int i = 10; i<20; i++) {
+	for (int i = 10; i<30; i=i+4) {
 		pthread_create(&tid[i], NULL, remove_thread, (void *)thread_structs[i]);
 	}
-	for (int i = 20; i<25; i++) {
+	for (int i = 11; i<30; i=i+4) {
 		pthread_create(&tid[i], NULL, length_thread, (void *)thread_structs[i]);
 	}
-	for (int i = 25; i<30; i++) {
+	for (int i = 12; i<30; i=i+4) {
 		pthread_create(&tid[i], NULL, contains_thread, (void *)thread_structs[i]);
 	}
-	for (int i = 30; i<35; i++) {
+	for (int i = 13; i<30; i=i+4) {
 		pthread_create(&tid[i], NULL, print_thread, (void *)thread_structs[i]);
+	}
+	for (int i = 30; i<35; i++) {
+		pthread_create(&tid[i], NULL, remove_thread, (void *)thread_structs[i]);
 	}
 	pthread_create(&tid[35], NULL, destroy_thread, (void *)thread_structs[35]);
 
