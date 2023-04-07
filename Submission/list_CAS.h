@@ -35,9 +35,13 @@ ll_create(void)
 static inline int
 ll_destroy(struct linked_list *ll)
 {
+    if (ll == NULL) {
+        return 0;
+    }
     struct node *old_head = atomic_load(&ll->head);
     if (old_head == NULL) {
         free(ll);
+        ll = NULL;
         return 1;
     }
     return 0;
@@ -92,10 +96,6 @@ ll_remove(struct linked_list *ll, int index)
         pos++;
     }
 
-    if (curr == NULL) {
-        return false;
-    }
-
     if (prev == NULL) {
         // this is for removing the first node
         struct node *old_head;
@@ -108,14 +108,16 @@ ll_remove(struct linked_list *ll, int index)
 
     } else {
         // removing any other node
-        struct node *old_next;
+        struct node *old_curr;
         do {
-            old_next = atomic_load(&curr->next);
-            if (old_next == NULL) {
+            old_curr = atomic_load(&curr);
+            if (old_curr == NULL) {
                 return false;
             }
-        } while (!atomic_compare_exchange_strong(&prev->next, &curr, old_next));
+        } while (!atomic_compare_exchange_strong(&prev->next, &curr, curr->next));
     }
+
+    free(curr);
     
 	return true;
 }
